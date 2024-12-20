@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tehtävienhallinta</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #ff00008c, #0051ff81);
+            background-size: cover;
+            background-attachment: fixed;
+            color: #fff;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ffffff81;
+        }
+        .task-input {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .task-input input {
+            flex: 1;
+            padding: 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            outline: none;
+        }
+        .task-input button {
+            padding: 15px 20px;
+            font-size: 18px;
+            color: #fff;
+            background: #ff6b6b;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: background 0.3s;
+        }
+        .task-input button:hover {
+            background: #ee5253;
+        }
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+        .task {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            transition: transform 0.2s;
+        }
+        .task:hover {
+            transform: scale(1.02);
+        }
+        .task.completed {
+            background: rgba(46, 204, 113, 0.2);
+        }
+        .task.completed span {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+        .task.completed span::after {
+            content: ' \2714'; /* Checkmark */
+            margin-left: 10px;
+            color: #2ecc71;
+        }
+        .task span {
+            flex: 1;
+            margin-right: 20px;
+            word-break: break-word;
+        }
+        .task-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .task button {
+            padding: 8px 12px;
+            font-size: 14px;
+            color: #fff;
+            background: #48dbfb;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .task button:hover {
+            background: #1dd1a1;
+        }
+        .task button:nth-child(2):hover {
+            background: #ff6b6b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tehtävienhallinta</h1>
+        <div class="task-input">
+            <input type="text" id="taskInput" placeholder="Kirjoita uusi tehtävä...">
+            <button onclick="addTask()">Lisää tehtävä</button>
+        </div>
+        <ul id="taskList" class="task-list"></ul>
+    </div>
+
+    <script>
+        function addTask() {
+            const taskInput = document.getElementById('taskInput');
+            const taskList = document.getElementById('taskList');
+
+            if (taskInput.value.trim() === '') {
+                alert('Kirjoita tehtävä ennen lisäämistä.');
+                return;
+            }
+
+            const taskItem = document.createElement('li');
+            taskItem.className = 'task';
+
+            const taskText = document.createElement('span');
+            taskText.textContent = taskInput.value;
+
+            const taskActions = document.createElement('div');
+            taskActions.className = 'task-actions';
+
+            const completeButton = document.createElement('button');
+            completeButton.textContent = 'Valmis';
+            completeButton.onclick = function() {
+                taskItem.classList.toggle('completed');
+            };
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Poista';
+            deleteButton.onclick = function() {
+                taskList.removeChild(taskItem);
+            };
+
+            taskActions.appendChild(completeButton);
+            taskActions.appendChild(deleteButton);
+
+            taskItem.appendChild(taskText);
+            taskItem.appendChild(taskActions);
+
+            taskList.appendChild(taskItem);
+            taskInput.value = '';
+        }
+    </script>
+</body>
+</html>

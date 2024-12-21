@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nappaa Nappula</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #d8e6639c, #cf65dd8c);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        #game-area {
+            position: relative;
+            margin: 20px auto;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            border: 2px solid #333;
+        }
+
+        .button {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle, #00ffea77, #1542d896);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease;
+        }
+
+        .button:hover {
+            transform: scale(1.2);
+        }
+
+        #score {
+            font-size: 1.8em;
+            color: #fff;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        #start-button {
+            background: linear-gradient(135deg, #0fec4288, #218837b2);
+            color: white;
+            padding: 12px 25px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        #start-button:hover {
+            background: linear-gradient(135deg, #218838, #1e7e34);
+            transform: scale(1.1);
+        }
+
+        #start-button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <h1>Nappaa Nappula!</h1>
+    <p>Yritä napata nappula ennen kuin se katoaa!</p>
+    <div id="score">Pisteet: 0</div>
+    <button id="start-button">Aloita peli</button>
+    <div id="game-area"></div>
+
+    <script>
+        const gameArea = document.getElementById('game-area');
+        const startButton = document.getElementById('start-button');
+        const scoreDisplay = document.getElementById('score');
+        let score = 0;
+        let gameInterval;
+
+        function createButton() {
+            const button = document.createElement('button');
+            button.classList.add('button');
+            const x = Math.random() * (gameArea.offsetWidth - 50);
+            const y = Math.random() * (gameArea.offsetHeight - 50);
+            button.style.left = `${x}px`;
+            button.style.top = `${y}px`;
+
+            button.addEventListener('click', () => {
+                score++;
+                scoreDisplay.textContent = `Pisteet: ${score}`;
+                button.remove();
+                createButton();
+            });
+
+            gameArea.appendChild(button);
+
+            setTimeout(() => {
+                if (button.parentElement) {
+                    button.remove();
+                    createButton();
+                }
+            }, 2000);
+        }
+
+        function startGame() {
+            score = 0;
+            scoreDisplay.textContent = `Pisteet: ${score}`;
+            startButton.disabled = true;
+            gameArea.innerHTML = '';
+            createButton();
+
+            gameInterval = setTimeout(() => {
+                alert(`Peli ohi! Lopulliset pisteet: ${score}`);
+                startButton.disabled = false;
+                gameArea.innerHTML = '';
+            }, 30000); // 30 sekuntia peliä
+        }
+
+        startButton.addEventListener('click', startGame);
+    </script>
+</body>
+</html>
